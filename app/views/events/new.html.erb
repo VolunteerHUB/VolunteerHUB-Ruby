@@ -1,0 +1,149 @@
+<h1>Create New Event</h1>
+<br />
+<%= form_for(:event, url: { action: "create" }, html: { class: "form-horizontal" }) do |f| %>
+  <div class="form-group">
+    <label class="col-sm-3 control-label">Name</label>
+    <div class="col-sm-6">
+      <input autofocus="autofocus" class="form-control" type="text" name="event[name]" id="event_name" placeholder="Event Name" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-3 control-label">Brief</label>
+    <div class="col-sm-6">
+      <textarea class="form-control" name="event[brief]" id="event_brief" rows="2" placeholder="Brief Description..."></textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-3 control-label">Description</label>
+    <div class="col-sm-6">
+      <textarea class="form-control" name="event[description]" id="event_description" rows="5" placeholder="Brief Description..."></textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-3 control-label">Multi-Day Event</label>
+    <div class="col-sm-6">
+      <div class="checkbox">
+        <label><input type="checkbox" id="multiday" value="1" /></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-3 control-label">Date</label>
+
+    <div class="col-sm-3">
+      <div class="input-group" id="startdate_picker">
+        <input type="text" class="form-control" id="startdate", name="startdate", placeholder="Date" />
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="input-group" id="enddate_picker">
+        <input type="text" class="form-control" id="enddate", name="enddate", placeholder="End Date" />
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <br />
+
+  <div class="form-group">
+    <label class="col-sm-3 control-label">Time</label>
+
+    <div class="col-sm-3">
+      <div class="input-group" id="starttime_picker">
+        <input type="text" class="form-control" id="starttime" name="starttime" placeholder="Start Time" />
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-time"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="col-sm-3">
+      <div class="input-group" id="endtime_picker">
+        <input type="text" class="form-control" id="endtime" name="endtime" placeholder="End Time" />
+        <span class="input-group-addon">
+          <span class="glyphicon glyphicon-time"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <br />
+
+  <div class="form-group">
+    <label class="col-sm-3 control-label">Location</label>
+    <div class="col-sm-6">
+      <div class="input-group" id="location_picker" data-toggle="modal" data-target="map_modal">
+        <input type="text" class="form-control" id="location" name="event[location]" placeholder="Location" />
+        <span class="input-group-addon" onclick="$('#map_modal').modal('show')">
+          <span class="glyphicon glyphicon-map-marker"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <br />
+
+  <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-8">
+      <button type="submit" class="btn btn-primary">Create Event</button>
+    </div>
+  </div>
+<% end %>
+
+<div class="modal fade" id="map_modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+        <h4 class="modal-title">Choose Event Location</h4>
+      </div>
+      <div class="modal-body">
+        <iframe height="450em" width="100%" frameborder="0" scrolling="no" id="loc_map" src="/utils/map"></iframe>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="getLoc">Select Location</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+<script src="//cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/v4.0.0/src/js/bootstrap-datetimepicker.js"></script>
+<script>
+  $(function() {
+    $("#startdate_picker").datetimepicker({ format: "MM/DD/YYYY" });
+    $("#enddate_picker").datetimepicker({ format: "MM/DD/YYYY" });
+
+    $("#starttime_picker").datetimepicker({ format: 'hh:mm a' });
+    $("#endtime_picker").datetimepicker({ format: 'hh:mm a' });
+
+    $("#enddate").attr("disabled", true);
+  });
+
+  $("#getLoc").click(function() {
+    var loc = $("#loc_map").contents().find("#location_name").val();
+    $("#location").val(loc);
+    $("#map_modal").modal("hide");
+  });
+
+  $("#multiday").click(function() {
+    if ($("#multiday").prop('checked')) {
+      $("#startdate").attr("placeholder", "Start Date");
+      $("#enddate").attr("disabled", false);
+    } else {
+      $("#startdate").attr("placeholder", "Date");
+      $("#enddate").attr("disabled", true);
+    }
+  });
+</script>
